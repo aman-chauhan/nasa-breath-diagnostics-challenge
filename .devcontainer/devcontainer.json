@@ -1,5 +1,14 @@
 {
   "image": "mcr.microsoft.com/devcontainers/python:3.12-bookworm",
   "features": {
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-toolsai.jupyter",
+        "ms-python.black-formatter",
+        "bierner.github-markdown-preview"
+      ]
+    }
   }
 }

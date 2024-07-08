@@ -1,0 +1,10 @@
+mkdir raw_data
+touch raw_data/README.md
+mkdir staging_data
+touch staging_data/README.md
+mkdir clean_data
+touch clean_data/README.md
+mkdir figures
+touch figures/README.md
+mkdir docs
+touch docs/index.md
