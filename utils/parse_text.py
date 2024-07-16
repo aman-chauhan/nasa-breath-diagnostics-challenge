@@ -35,9 +35,10 @@ def text_to_readings_df(path, test):
         ]
     data = correct_time(data)
     data_df = pd.DataFrame(data, columns=header)
-    data_df["Patient ID"] = patient_id
     data_df = data_df.rename(columns={"Min:Sec": "Time"})
     data_df["Time"] = pd.to_timedelta(data_df["Time"]).dt.total_seconds()
+    data_df = data_df - data_df.min()
+    data_df["Patient ID"] = patient_id
     return data_df
 
 
@@ -52,4 +53,4 @@ def text_to_patients_df(path, test):
                 result = 1
             else:
                 result = 0
-    return pd.DataFrame({"patient_id": [patient_id], "result": [result]})
+    return pd.DataFrame({"Patient ID": [patient_id], "Result": [result]})
