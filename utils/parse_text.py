@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 def correct_time(data):
@@ -37,7 +38,11 @@ def text_to_readings_df(path, test):
     data_df = pd.DataFrame(data, columns=header)
     data_df = data_df.rename(columns={"Min:Sec": "Time"})
     data_df["Time"] = pd.to_timedelta(data_df["Time"]).dt.total_seconds()
-    data_df = data_df - data_df.min()
+    for col in data_df.columns:
+        if col == "Time":
+            data_df[col] = data_df[col] - np.floor(data_df[col].min())
+        else:
+            data_df[col] = data_df[col] - data_df[col].min()
     data_df["Patient ID"] = patient_id
     return data_df
 
