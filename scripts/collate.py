@@ -1,4 +1,4 @@
-from utils.parse_text import *
+from utils import text_to_readings_df, text_to_patients_df
 import pandas as pd
 import os
 

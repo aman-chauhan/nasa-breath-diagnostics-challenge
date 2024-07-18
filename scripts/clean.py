@@ -1,4 +1,4 @@
-from utils.clean_data import clean_dataframe, convert_df_to_array
+from utils import clean_dataframe, convert_df_to_array
 import pandas as pd
 import numpy as np
 import os
