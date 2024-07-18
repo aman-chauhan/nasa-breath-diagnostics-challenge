@@ -57,11 +57,10 @@ if __name__ == "__main__":
     history = model.fit(
         x=X_train,
         y=Y_train,
-        batch_size=15,
-        epochs=100,
-        validation_split=0.33333,
+        batch_size=5,
+        epochs=28,
+        validation_split=0.2,
         callbacks=[
-            keras.callbacks.EarlyStopping(monitor="val_loss", mode="min", patience=20),
             keras.callbacks.CSVLogger(os.path.join(RESULT_DATA_FOLDER, "rnn.csv")),
         ],
     )
