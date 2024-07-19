@@ -10,19 +10,21 @@ import numpy as np
 CLEAN_DATA_FOLDER = "clean_data"
 RESULT_DATA_FOLDER = "results"
 WEIGHTS_FOLDER = os.path.join("models", "weights")
-MODEL_NAME = "rnn"
+MODEL_NAME = "bi-rnn"
 SEED = 42
 
 keras.utils.set_random_seed(SEED)
 
 
-def create_rnn_model():
+def create_bi_rnn_model():
     i = keras.Input(shape=(None, 64), name=f"{MODEL_NAME}_input")
-    r = keras.layers.SimpleRNN(
-        128,
-        kernel_initializer=keras.initializers.GlorotUniform(seed=SEED),
-        seed=SEED,
-        name=f"{MODEL_NAME}_layer",
+    r = keras.layers.Bidirectional(
+        keras.layers.SimpleRNN(
+            128,
+            kernel_initializer=keras.initializers.GlorotUniform(seed=SEED),
+            seed=SEED,
+            name=f"{MODEL_NAME}_layer",
+        )
     )(i)
     l = keras.layers.Dense(
         256,
@@ -40,7 +42,7 @@ def create_rnn_model():
 
 
 if __name__ == "__main__":
-    model = create_rnn_model()
+    model = create_bi_rnn_model()
     model.compile(
         optimizer="adam",
         loss="binary_crossentropy",
@@ -58,7 +60,7 @@ if __name__ == "__main__":
         x=X_train,
         y=Y_train,
         batch_size=5,
-        epochs=28,
+        epochs=8,
         validation_split=0.2,
         callbacks=[
             keras.callbacks.CSVLogger(
