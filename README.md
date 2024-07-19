@@ -14,6 +14,6 @@ python -m scripts.clean
 ## TODO
 
 - Show/plot the class distribution in train dataset
-- Plot the correlation between the features D1-D64
+- ~~Plot the correlation between the features D1-D64~~
 - Evaluate DTW with KNN (Grid Search)
 - Evaluate methods to increase the number of examples for training
