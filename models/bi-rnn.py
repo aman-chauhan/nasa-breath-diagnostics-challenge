@@ -5,6 +5,7 @@ load_dotenv()
 import os
 import keras
 import numpy as np
+from utils.data_loader import DataLoader
 
 
 CLEAN_DATA_FOLDER = "clean_data"
@@ -44,7 +45,7 @@ def create_bi_rnn_model():
 if __name__ == "__main__":
     model = create_bi_rnn_model()
     model.compile(
-        optimizer="adam",
+        optimizer=keras.optimizers.Adam(),
         loss="binary_crossentropy",
         metrics=[
             keras.metrics.BinaryAccuracy(),
@@ -56,16 +57,24 @@ if __name__ == "__main__":
     X_train = np.load(os.path.join(CLEAN_DATA_FOLDER, "X_Train.npy"))
     Y_train = np.load(os.path.join(CLEAN_DATA_FOLDER, "Y_Train.npy"))
     Y_train = np.expand_dims(Y_train, -1)
+    X_valid = X_train[-9:]
+    Y_valid = Y_train[-9:]
+    X_train = X_train[:-9]
+    Y_train = Y_train[:-9]
     history = model.fit(
-        x=X_train,
-        y=Y_train,
-        batch_size=5,
-        epochs=8,
-        validation_split=0.2,
+        x=DataLoader(X_train, Y_train, batch_size=9, augment=True),
+        epochs=1000,
+        validation_data=DataLoader(X_valid, Y_valid, batch_size=9, augment=False),
+        shuffle=False,
         callbacks=[
             keras.callbacks.CSVLogger(
                 os.path.join(RESULT_DATA_FOLDER, f"{MODEL_NAME}.csv")
             ),
+            keras.callbacks.ModelCheckpoint(
+                os.path.join(WEIGHTS_FOLDER, f"{MODEL_NAME}.keras"),
+                monitor="val_loss",
+                save_best_only=True,
+            ),
+            keras.callbacks.EarlyStopping(monitor="val_loss", patience=100),
         ],
     )
-    model.save(os.path.join(WEIGHTS_FOLDER, f"{MODEL_NAME}.keras"))

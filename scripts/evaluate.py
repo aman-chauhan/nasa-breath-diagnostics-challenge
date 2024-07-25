@@ -22,6 +22,10 @@ def main(model_name):
     model = keras.saving.load_model(os.path.join(WEIGHTS_FOLDER, f"{model_name}.keras"))
     ref_patient_df = pd.DataFrame({"Patient ID": PATIENT_LIST})
     X_test = np.load(os.path.join(CLEAN_DATA_FOLDER, "X_Test.npy"))
+    X_test = X_test[:,132:,:] - X_test[:,131:132,:]
+    mean = np.expand_dims(X_test.mean(axis=1), axis=1)
+    std = np.expand_dims(X_test.std(axis=1), axis=1)
+    X_test = (X_test - mean) / std
     Y_test = model.predict(X_test)
     Y_test[Y_test >= 0.5] = 1
     Y_test[Y_test < 0.5] = 0
