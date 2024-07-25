@@ -9,11 +9,6 @@ sh setup.sh
 # extract the zip file inside raw_data folder
 python -m scripts.collate
 python -m scripts.clean
+python -m models.<model_name>
+python -m scripts.evaluate <model_name>
 ```
-
-## TODO
-
-- Show/plot the class distribution in train dataset
-- ~~Plot the correlation between the features D1-D64~~
-- Evaluate DTW with KNN (Grid Search)
-- Evaluate methods to increase the number of examples for training
