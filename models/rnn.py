@@ -18,19 +18,23 @@ keras.utils.set_random_seed(SEED)
 
 
 def create_rnn_model():
+    K = 2
     i = keras.Input(shape=(None, 64), name=f"{MODEL_NAME}_input")
-    r = keras.layers.SimpleRNN(
-        128,
-        kernel_initializer=keras.initializers.GlorotUniform(seed=SEED),
-        seed=SEED,
-        name=f"{MODEL_NAME}_layer",
-    )(i)
-    l = keras.layers.Dense(
-        256,
-        activation="relu",
-        kernel_initializer=keras.initializers.GlorotUniform(seed=SEED),
-        name="dense_layer",
-    )(r)
+    for k in range(1, K + 1):
+        r = keras.layers.SimpleRNN(
+            128,
+            kernel_initializer=keras.initializers.GlorotUniform(seed=SEED),
+            return_sequences=False if k == K else True,
+            seed=SEED,
+            name=f"{MODEL_NAME}{k}_layer",
+        )(i if k == 1 else l)
+        l = keras.layers.Dense(
+            256,
+            activation="relu",
+            kernel_initializer=keras.initializers.GlorotUniform(seed=SEED),
+            kernel_regularizer=keras.regularizers.L2(0.1),
+            name=f"dense{k}_layer",
+        )(r)
     o = keras.layers.Dense(
         1,
         activation="sigmoid",
